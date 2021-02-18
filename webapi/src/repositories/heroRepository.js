@@ -1,4 +1,4 @@
-const { readFile, writeFile } = require('fs').promises;
+const { readFile, writeFile } = require("fs").promises;
 
 class HeroRepository {
   constructor({ file }) {
@@ -15,6 +15,15 @@ class HeroRepository {
 
     return all.find(({ id }) => itemId === id);
   }
+
+  async create(data) {
+    const currentFile = await this._currentFileContent();
+    currentFile.push(data);
+
+    await writeFile(this.file, JSON.stringify(currentFile));
+
+    return data.id;
+  }
 }
 
 module.exports = HeroRepository;
@@ -22,7 +31,13 @@ module.exports = HeroRepository;
 const heroRepository = new HeroRepository({
   file: "../../database/data.json",
 });
-heroRepository
-  .find()
-  .then(console.log)
-  .catch((error) => console.log(error));
+
+// heroRepository
+//   .create({ id: 2, name: "Chapolin" })
+//   .then(console.log)
+//   .catch((error) => console.log(erro));
+
+// heroRepository
+//   .find(1)
+//   .then(console.log)
+//   .catch((error) => console.log(error));
